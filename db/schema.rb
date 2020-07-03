@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_03_150810) do
+ActiveRecord::Schema.define(version: 2020_07_03_155047) do
 
   create_table "districts", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
     t.string "name"
@@ -51,7 +51,6 @@ ActiveRecord::Schema.define(version: 2020_07_03_150810) do
 
   create_table "users", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
     t.string "name"
-    t.string "username"
     t.string "email"
     t.string "password_digest"
     t.datetime "created_at", precision: 6, null: false
@@ -61,6 +60,7 @@ ActiveRecord::Schema.define(version: 2020_07_03_150810) do
     t.string "phone1"
     t.string "phone2"
     t.boolean "admin"
+    t.boolean "active", default: true
   end
 
   add_foreign_key "guard_employees", "guards"
