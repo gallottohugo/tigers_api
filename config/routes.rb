@@ -4,7 +4,8 @@ Rails.application.routes.draw do
 
   	#get '/*a', to: 'application#not_found'
   	namespace :v1 do 
-    	resources :users
+		resources :users
+		resources :guards
     	resources :houses
     	resources :districts do
       		resources :houses, only: :index
