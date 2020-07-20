@@ -6,6 +6,10 @@ class V1::GuardsController < ApplicationController
 	def create
 		@guard = Guard.new(guard_params)
 		if @guard.save
+			 params[:employees].split(",").map(&:to_i).each do |item|
+				valid_employee(item)
+				GuardEmployee.create(guard_id: @guard.id, employee_id: @employee.id)
+			end
 			render json: @guard, status: :created
 		else
 			render json: { errors: @distric.errors.full_messages }, status: :unprocessable_entity
@@ -22,5 +26,11 @@ class V1::GuardsController < ApplicationController
 		@district = District.find(params[:district_id])
     	rescue ActiveRecord::RecordNotFound
       		render json: { errors: 'District not found' }, status: :not_found
+	end
+
+	def valid_employee(employee_id)
+		@employee = User.find(employee_id)
+    	rescue ActiveRecord::RecordNotFound
+      		render json: { errors: 'Employee not found' }, status: :not_found
 	end
 end
