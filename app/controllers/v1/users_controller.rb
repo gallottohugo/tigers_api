@@ -1,10 +1,10 @@
 class V1::UsersController < ApplicationController
 	before_action :authorize_request, except: :create
   	before_action :find_user, except: %i[create index]
+    before_action :filter_users, only: :index
 
   	# GET /users
   	def index
-    	@users = User.all
     	render json: @users, status: :ok
   	end
 
@@ -36,6 +36,18 @@ class V1::UsersController < ApplicationController
   	end
 
   	private
+
+    def filter_users
+        if params[:filter] == "customers" then
+            @users = User.where('user_type = ?', 'customer')
+        elsif params[:filter] == 'employee' then
+            @users = User.where('user_type = ?', 'employee')
+        elsif params[:filter] == 'users' then
+            @users = User.where('user_type = ? OR user_type = ? OR user_type = ?', 'admin', 'coordinator', 'employee')
+        else
+            @users = User.all
+        end
+    end
 
   	def find_user
 		#@user = User.find_by_username!(params[:_username])
