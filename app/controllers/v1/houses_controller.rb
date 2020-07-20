@@ -43,7 +43,9 @@ class V1::HousesController < ApplicationController
 
 
 	def valid_customer
-		@customer = User.find(params[:customer_id])
+
+		@customer = User.find(params[:user_id]) if params.has_key?(:user_id)
+		@customer = User.find(params[:customer_id]) if params.has_key?(:customer_id)
     	rescue ActiveRecord::RecordNotFound
       		render json: { errors: 'Customer not found' }, status: :not_found
 	end
@@ -60,6 +62,9 @@ class V1::HousesController < ApplicationController
 		if params.has_key?(:district_id)
 			valid_disctrict
 			@houses = @district.houses
+		elsif params.has_key?(:user_id)
+			valid_customer
+			@houses = @customer.houses
 		else
 			@houses = @current_user.houses
 		end
